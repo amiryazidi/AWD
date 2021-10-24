@@ -1,0 +1,35 @@
+version: "3.9"
+services:
+  discovery:
+    build:  ../../discovery-server-v3
+    ports:
+      - "8761:8761"
+    image: "discovery-server"
+  candidate_b:
+    build:  ../../Candidat-MS-v3
+    environment: 
+      - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
+    ports:
+      - "3000:8080"
+    image: "candidate-service"
+    depends_on:
+      - job_a
+  candidate_c:
+    build:  ../../Candidat-MS-v3
+    environment: 
+      - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
+    ports:
+      - "3001:8080"
+    image: "candidate-service"
+    depends_on:
+      - job_a
+  job_a:
+    build: ../../Job-MS-v3
+    environment: 
+      - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
+    ports:
+      - "8182:8180"
+    image: "job-service"
+      
+      
+  
